@@ -5,8 +5,20 @@ import sys
 
 def number_of_components(adj):
     result = 0
-    #write your code here
+    visited = set()
+
+    def check(v):
+        visited.add(v)
+        for nbr in adj[v]:
+            if nbr not in visited:
+                check(nbr)
+
+    for vertex in range(len(adj)):
+        if vertex not in visited:
+            check(vertex)
+            result += 1
     return result
+
 
 if __name__ == '__main__':
     input = sys.stdin.read()
