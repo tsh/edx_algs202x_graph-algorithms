@@ -3,7 +3,27 @@
 import sys
 
 
+def check_cycle(node, visited, on_stack, graph):
+    visited.add(node)
+    on_stack.add(node)
+
+    for nbr in graph[node]:
+        if nbr not in visited:
+            if check_cycle(nbr, visited, on_stack, graph):
+                return 1
+        if nbr in on_stack:
+            return 1
+    on_stack.remove(node)
+    return 0
+
+
 def acyclic(adj):
+    visited = set()
+    on_stack = set()
+    for node in range(len(adj)):
+        if node not in visited:
+            if check_cycle(node, visited, on_stack, adj):
+                return 1
     return 0
 
 if __name__ == '__main__':
