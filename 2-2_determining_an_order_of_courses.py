@@ -2,16 +2,24 @@
 
 import sys
 
-def dfs(adj, used, order, x):
-    #write your code here
-    pass
-
 
 def toposort(adj):
-    used = [0] * len(adj)
-    order = []
-    #write your code here
-    return order
+    result = []
+    visited = set()
+
+    def dfs(node):
+        if node in visited:
+            return
+        for nbr in adj[node]:
+            dfs(nbr)
+        visited.add(node)
+        result.append(node)
+
+    for v in range(len(adj)):
+        if v not in visited:
+            dfs(v)
+
+    return result[::-1]
 
 if __name__ == '__main__':
     input = sys.stdin.read()
