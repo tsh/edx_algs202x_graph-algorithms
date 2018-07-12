@@ -1,11 +1,22 @@
 #Uses python3
 
 import sys
-import queue
+from collections import deque
 
 def bipartite(adj):
-    #write your code here
-    return -1
+    colors = [None] * len(adj)
+    colors[0] = True
+    q = deque()
+    q.append(0)
+    while q:
+        u = q.popleft()
+        for nbr in adj[u]:
+            if colors[nbr] is None:
+                colors[nbr] = not colors[u]
+                q.append(nbr)
+            elif colors[nbr] == colors[u]:
+                return 0
+    return 1
 
 if __name__ == '__main__':
     input = sys.stdin.read()
