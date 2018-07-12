@@ -1,11 +1,20 @@
 #Uses python3
 
 import sys
-import queue
+from collections import deque
 
 def distance(adj, s, t):
-    #write your code here
-    return -1
+    dist = {v: float('Inf') for v in range(len(adj))}
+    dist[s] = 0
+    q = deque()
+    q.append(s)
+    while q:
+        u = q.popleft()
+        for nbr in adj[u]:
+            if dist[nbr] == float('Inf'):
+                q.append(nbr)
+                dist[nbr] = dist[u] + 1
+    return -1 if dist[t] == float('Inf') else dist[t]
 
 if __name__ == '__main__':
     input = sys.stdin.read()
