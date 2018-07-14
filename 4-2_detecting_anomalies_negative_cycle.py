@@ -4,7 +4,23 @@ import sys
 
 
 def negative_cycle(adj, cost):
-    #write your code here
+    dist = [9999999999999 for _ in range(len(adj))]
+    dist[0] = 0
+
+    for _ in range(len(adj) - 1):
+        for vert in range(len(adj)):
+            for ni in range(len(adj[vert])):
+                neighbor = adj[vert][ni]
+                nbr_cost = cost[vert][ni]
+                if dist[neighbor] > dist[vert] + nbr_cost:
+                    dist[neighbor] = dist[vert] + nbr_cost
+    # detect negative
+    for vert in range(len(adj)):
+        for ni in range(len(adj[vert])):
+            neighbor = adj[vert][ni]
+            nbr_cost = cost[vert][ni]
+            if dist[neighbor] > dist[vert] + nbr_cost:
+                return 1
     return 0
 
 
