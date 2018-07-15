@@ -1,14 +1,12 @@
 #Uses python3
 
 import sys
-import queue
+from collections import deque
 
 
 def shortet_paths(adj, cost, s, distance, reachable, shortest):
     distance[s] = 0
     reachable[s] = ''
-    prev = [None] * len(adj)
-    last_relax = None
     # Bellman-Ford
     for _ in range(len(adj) - 1):
         for vert in range(len(adj)):
@@ -18,17 +16,24 @@ def shortet_paths(adj, cost, s, distance, reachable, shortest):
                 if distance[neighbor] > distance[vert] + weight:
                     distance[neighbor] = distance[vert] + weight
                     reachable[neighbor] = distance[vert] + weight
-                    last_relax = neighbor
-                    prev[neighbor] = vert
     # negative cycle
-    for _ in range(len(adj)):
-        x = prev[last_relax]
-    shortest[x] = 0  # cycle start
-    y = x
-    x = prev[x]
-    while y != x:
-        shortest[x] = 0
-        x = prev[x]
+    q = deque()
+    for vert in range(len(adj)):
+        for npos in range(len(adj[vert])):
+            neighbor = adj[vert][npos]
+            weight = cost[vert][npos]
+            if distance[neighbor] > distance[vert] + weight:
+                if neighbor not in q:
+                    q.append(neighbor)
+
+    visited = set()
+    while q:
+        u = q.popleft()
+        shortest[u] = 0
+        visited.add(u)
+        for n in adj[u]:
+            if n not in visited:
+                q.append(n)
 
 
 if __name__ == '__main__':
