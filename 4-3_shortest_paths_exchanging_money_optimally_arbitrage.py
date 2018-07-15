@@ -8,7 +8,7 @@ def shortet_paths(adj, cost, s, distance, reachable, shortest):
     distance[s] = 0
     reachable[s] = ''
     prev = [None] * len(adj)
-    cycle_v = None
+    last_relax = None
     # Bellman-Ford
     for _ in range(len(adj) - 1):
         for vert in range(len(adj)):
@@ -18,15 +18,17 @@ def shortet_paths(adj, cost, s, distance, reachable, shortest):
                 if distance[neighbor] > distance[vert] + weight:
                     distance[neighbor] = distance[vert] + weight
                     reachable[neighbor] = distance[vert] + weight
-                    cycle_v = neighbor
+                    last_relax = neighbor
                     prev[neighbor] = vert
     # negative cycle
-    for vert in range(len(adj)):
-        for npos in range(len(adj[vert])):
-            neighbor = adj[vert][npos]
-            weight = cost[vert][npos]
-            if distance[neighbor] > distance[vert] + weight:
-                shortest[neighbor] = 0
+    for _ in range(len(adj)):
+        x = prev[last_relax]
+    shortest[x] = 0  # cycle start
+    y = x
+    x = prev[x]
+    while y != x:
+        shortest[x] = 0
+        x = prev[x]
 
 
 if __name__ == '__main__':
